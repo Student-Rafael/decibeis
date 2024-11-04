@@ -2,6 +2,8 @@ const int PinoSensor = A0; // Pino Analógico de Entrada 0 (Saída do sensor KY-
  
 int ValorSensor = 0;
 int valorMaior = 0;
+float tensao = 0;
+int dB = 0;
 int cont = 0;
  
 void setup() {
@@ -20,5 +22,19 @@ void loop() {
  
  Serial.print(valorMaior);
   cont = 0; // Reinicia o contador para nova coleta
+  tensao = valorMaior / 1023.0 * 4.6; // Ajustado para usar 4.6 como múltiplo
+ 
+  // Cálculo aproximado para decibéis (ajuste conforme a calibração do sensor)
+  dB = 50 * tensao; // Ajuste conforme o sensor KY-038
+ 
+  // Garante que o valor de dB não seja negativo
+  if (dB < 0) {
+    dB = 0;
+  }
+ 
+  // Exibe o valor de dB no monitor serial
+  Serial.print("Intensidade: ");
+  Serial.print(dB);
+  Serial.println(" dB");
 
 }
