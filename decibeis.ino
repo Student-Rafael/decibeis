@@ -1,36 +1,24 @@
-
-//190 - 47dB
-//192 - 70dB
-//193 - 78dB
-//195 - 86dB
-
-
-const int sensorPin = A0;
-int valorSom;
-int maiorValor = 0;  // Variável para armazenar o maior valor
-
+const int PinoSensor = A0; // Pino Analógico de Entrada 0 (Saída do sensor KY-038)
+ 
+int ValorSensor = 0;
+int valorMaior = 0;
+int cont = 0;
+ 
 void setup() {
-  Serial.begin(9600);
-  pinMode(sensorPin, INPUT);
+  Serial.begin(9600); // Inicializa a comunicação serial
 }
-
+ 
 void loop() {
-  valorSom = analogRead(sensorPin);
-
-  // Exibe todos os valores lidos quando o valor for maior que 195
-  if (valorSom > 210) {
-    Serial.print("Nível de som: ");
-    Serial.println(valorSom);
-
-    // Atualiza o maior valor se o valor atual for maior
-    if (valorSom > maiorValor) {
-      maiorValor = valorSom;
-      // Exibe o maior valor
-    Serial.print("Maior nível de som até agora: ");
-    Serial.println(maiorValor);
+  // Coletando dados por um número menor de amostras para reduzir a latência
+  while (cont < 1000) {  // Número menor de amostras para respostas mais rápidas
+    ValorSensor = analogRead(PinoSensor); // Leitura do sensor KY-038
+    if (ValorSensor > valorMaior) {
+      valorMaior = ValorSensor; // Armazena o maior valor lido
     }
-
+    cont++;
   }
+ 
+ Serial.print(valorMaior);
+  cont = 0; // Reinicia o contador para nova coleta
 
 }
-
